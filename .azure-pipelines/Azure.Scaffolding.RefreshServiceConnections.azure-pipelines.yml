@@ -23,7 +23,7 @@ steps:
       azureSubscription: serviceConnection
       scriptType: pscore
       scriptLocation: scriptPath
-      scriptPath: ./scripts/devops/RefreshDevOpsConnections.ps1
+      scriptPath: ./scripts/RefreshDevOpsConnections.ps1
       arguments: -Organisation $(System.CollectionUri)
         -Project $(System.TeamProject)
         -Token $(System.AccessToken)
