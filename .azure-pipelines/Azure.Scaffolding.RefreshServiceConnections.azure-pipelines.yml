@@ -1,0 +1,33 @@
+name: $(Date:yy.MM.dd)$(Rev:.rr)
+
+schedules:
+  - cron: '0 3 * * 1'
+    displayName: Daily 3AM
+    branches:
+      include:
+        - main
+    always: true
+
+trigger: none
+
+steps:
+  - task: Bash@3
+    displayName: Print environment variables
+    inputs:
+      targetType: inline
+      script: env | sort
+
+  - task: AzureCLI@2
+    displayName: Refresh Service Connections
+    inputs:
+      azureSubscription: serviceConnection
+      scriptType: pscore
+      scriptLocation: scriptPath
+      scriptPath: ./scripts/devops/RefreshDevOpsConnections.ps1
+      arguments: -Organisation $(System.CollectionUri)
+        -Project $(System.TeamProject)
+        -Token $(System.AccessToken)
+        -AppRegNamingConvention "regex-naming-convention"
+        -InformationAction Continue
+        -Debug:([bool]$env:SYSTEM_DEBUG)
+        -Verbose:([bool]$env:SYSTEM_DEBUG)
