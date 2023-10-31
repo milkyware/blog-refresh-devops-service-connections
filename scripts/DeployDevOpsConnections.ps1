@@ -51,7 +51,6 @@ process {
         process {
             Write-Information "Deploying service connection for $AppRegName to $SubscriptionName"
 
-            #TODO: Added support for in-place updates to service connections
             Write-Debug "Checking for existing service connection for $AppRegName to $SubscriptionName"
             $serviceConnection = az devops service-endpoint list --organization $Organisation --project $Project | ConvertFrom-Json | Where-Object {$_.authorization.parameters.serviceprincipalid -match "$($ar.AppId)" -and $_.data.subscriptionName -eq $SubscriptionName}
             if ($serviceConnection) 
