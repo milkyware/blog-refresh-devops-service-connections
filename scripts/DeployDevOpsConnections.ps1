@@ -78,11 +78,8 @@ process {
                 }
                 return
             }
-            else 
-            {
-                $serviceConnectionName = "$AppRegName-$SubscriptionName"
-            }
 
+            $serviceConnectionName = "$AppRegName-$SubscriptionName"
             Write-Debug "Creating service connection `"$serviceConnectionName`""
             if ($PSCmdlet.ShouldProcess("Created service connection $serviceConnectionName"))
             {
