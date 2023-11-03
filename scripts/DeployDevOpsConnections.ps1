@@ -52,7 +52,7 @@ process {
             Write-Information "Deploying service connection for $AppRegName to $SubscriptionName"
 
             Write-Debug "Checking for existing service connection for $AppRegName to $SubscriptionName"
-            $serviceConnection = az devops service-endpoint list --organization $Organisation --project $Project | ConvertFrom-Json | Where-Object {$_.authorization.parameters.serviceprincipalid -match "$($ar.AppId)" -and $_.data.subscriptionName -eq $SubscriptionName}
+            $serviceConnection = az devops service-endpoint list --organization $Organisation --project $Project | ConvertFrom-Json | Where-Object {$_.authorization.parameters.serviceprincipalid -match "$AppRegId" -and $_.data.subscriptionName -eq $SubscriptionName}
             if ($serviceConnection) 
             {
                 $serviceConnectionFile = [System.IO.Path]::GetTempFileName()
@@ -112,6 +112,13 @@ process {
     {
         $appRegCreds = az ad app credential reset --id $appRegObj.id | ConvertFrom-Json
         Write-Verbose "secret=$($appRegCreds.password)"
+    }
+    else
+    {
+        $appRegCreds = @{
+            password = "password"
+            tenant = [guid]::Empty.ToString()
+        }
     }
 
     foreach ($s in $Subscriptions.ToLower())
